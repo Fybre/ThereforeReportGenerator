@@ -1,0 +1,133 @@
+﻿@page "/reportdetail/{id?}"
+@rendermode InteractiveServer
+@using ThereforeReportGenerator.Controllers;
+@using ThereforeReportGenerator.Models;
+@using ThereforeReportGenerator.Context;
+@inject ReportDbContext db;
+@inject List<MailTemplate> mailTemplates;
+
+
+<PageTitle>Report Detail</PageTitle>
+
+<div class="container-fluid col-10 p-3">
+    <div class="card">
+        <div class="card-header">
+            <h3>JobDetail</h3>
+        </div>
+        <div class="card-body">
+            @report.Id
+            <div class="form-group row p-1">
+                <label for="reportname" class="col-xs-4 col-sm-2 col-form-label">Report Name</label>
+                <div class="col-xs-8 col-sm-6">
+                    <input id="reportname" name="reportname" placeholder="Name of the report" type="text" class="form-control" @bind="report.Reportname">
+                </div>
+            </div>
+            <div class="form-group row p-1">
+                <label for="tenantname" class="col-xs-4 col-sm-2 col-form-label">Tenant Name</label>
+                <div class="col-xs-8 col-sm-6">
+                    <input id="tenantname" name="tenantname" placeholder="Tenant" type="text" class="form-control" @bind="report.TenantName">
+                </div>
+            </div>
+            <div class="form-group row p-1">
+                <label for="tenanturl" class="col-xs-4 col-sm-2 col-form-label">Tenant URL</label>
+                <div class="col-xs-8 col-sm-6">
+                    <input id="tenanturl" name="tenanturl" placeholder="https://tenant.thereforeonline.com" type="text" class="form-control" @bind="report.TenantUrl">
+                </div>
+            </div>
+            <div class="form-group row p-1">
+                <label for="tenantauthorisation" class="col-xs-4 col-sm-2 col-form-label">Tenant Authorisation <NavLink href="https://tools.fybre.me/basic-auth-generator" target="_blank">?</NavLink></label>
+                <div class="col-xs-8 col-sm-6">
+                    <input id="tenantauthorisation" name="tenantauthorisation" placeholder="BASE XXXXXX or BEARER XXXX" type="text" class="form-control" @bind="report.TenantAuthorisation">
+                </div>
+            </div>
+            <div class="form-group row p-1">
+                <label for="text" class="col-xs-4 col-sm-2 col-form-label">Processes</label>
+                <div class="ccol-xs-8 col-sm-6">
+                    <input id="text" name="text" placeholder="3,34,66" type="text" aria-describedby="textHelpBlock" class="form-control" @bind="report.WFProcesses">
+                    <span id="textHelpBlock" class="form-text text-muted">Leave blank for all wf processes, otherwise comma separated list of wf process no's</span>
+                </div>
+            </div>
+            <div class="form-group row p-1">
+                <label for="cronschedule" class="col-xs-4 col-sm-2 col-form-label">Cron Schedule <NavLink href="https://tools.fybre.me/crontab-generator" target="_blank">?</NavLink></label>
+                <div class="col-xs-8 col-sm-6">
+                    <input id="cronschedule" name="cronschedule" type="text" class="form-control" @bind="report.CronSchedule">
+                    <span id="textHelpBlockCron" class="form-text text-muted">Next Run: @report.NextRunLocalTime</span>
+                </div>
+            </div>
+            <div class="form-group row p-1">
+                <label for="adminemil" class="col-xs-4 col-sm-2 col-form-label">Admin Email</label>
+                <div class="col-xs-8 col-sm-6">
+                    <input id="adminemail" name="adminemail" type="text" class="form-control" @bind="report.AdminEmail">
+                </div>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" @bind="report.SendAllToAdmin" />
+                <label class="form-check-label" for="enabledcheck">Send all to Admin</label>
+            </div>
+
+            <div class="form-group row p-1">
+                <label for="emailtemplate" class="col-xs-4 col-sm-2 col-form-label">Email Template</label>
+                <div class="col-xs-8 col-sm-6">
+                    <select id="emailtemplate" name="emailtemplate" class="form-select" @bind="report.MailTemplateId">
+                        @{
+                            foreach(var t in mailTemplates)
+                            {
+                                <option value=@t.Id>@t.TemplateName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" @bind="report.Enabled" id="enabledcheck" />
+                <label class="form-check-label" for="enabledcheck">Enabled</label>
+            </div>
+            <div class="form-group row p-1">
+                <div class="offset-4 col-8">
+                    <span><button name="add" type="button" @onclick="AddReport">@(reportId > 0 ? "Save" : "Add")</button>&nbsp;@status</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+
+    [Parameter]
+    public string? id { get; set; }
+
+    private int reportId;
+
+    private ReportConfiguration report = new ReportConfiguration();
+    private string status = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(id))
+        {
+            if (int.TryParse(id, out reportId)) { await LoadReport(reportId); }
+        }
+    }
+
+    private async Task LoadReport(int id)
+    {
+        report = await db.ReportConfigurations.FindAsync(id) ?? new ReportConfiguration();
+    }
+
+
+    private async Task AddReport()
+    {
+        if (report.Id > 0)
+        {
+            db.ReportConfigurations.Update(report);
+        }
+        else
+        {
+            db.ReportConfigurations.Add(report);
+        }
+        await db.SaveChangesAsync();
+        await LoadReport(report.Id);
+        status = "Saved";
+        await Task.Delay(2000);
+        status = "";
+    }
+}

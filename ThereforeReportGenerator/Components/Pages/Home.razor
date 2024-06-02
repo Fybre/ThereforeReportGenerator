@@ -1,0 +1,127 @@
+﻿@page "/"
+@using ThereforeReportGenerator.Models
+@using ThereforeReportGenerator.Context;
+@using ThereforeReportGenerator.Controllers;
+@rendermode InteractiveServer
+@inject ReportDbContext db;
+@inject NavigationManager navManager;
+@inject ReportController reportController;
+
+
+
+<PageTitle>Home</PageTitle>
+
+<div class="container-fluid col-10 p-3">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3>Reports</h3>
+            <NavLink class="btn btn-primary" href="/reportdetail">+</NavLink>
+        </div>
+        <div class="card-body">
+            @{
+                if (reportList != null && reportList.Count > 0)
+                {
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Tenant</th>
+                                <th>Cron</th>
+                                <th>Next Run</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var r in reportList)
+                                {
+                                    <tr class="@(r.Enabled?"table-default":"table-secondary")">
+                                        <td>@r.Reportname</td>
+                                        <td>@r.TenantName</td>
+                                        <td>@r.CronSchedule</td>
+                                        <td>@(r.NextRunLocalTime)</td>
+                                        <td> 
+                                            <button name="runReport" class="btn btn-outline-secondary" type="button" @onclick="() =>{RunReport(r.Id);}"><span class="@(isProcessing.Contains(r.Id)?"spinner-border spinner-border-sm":"")"></span>Run</button>&nbsp;
+                                            <button name="editReport" class="btn btn-outline-secondary" type="button" @onclick="() => {EditReport(r.Id);}">Edit</button>&nbsp;
+                                            <button name="deleteReport" class="btn btn-outline-secondary" type="button" @onclick="() =>{DeleteReport(r.Id);}">Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>No reports defined. Why not <NavLink href="/reportdetail">create</NavLink> one?</p>
+                }
+            }
+        </div>
+        <div class="card-footer">
+            @jobStatus
+        </div>
+    </div>
+</div>
+
+@code {
+    private string jobStatus = string.Empty;
+    private List<ReportConfiguration> reportList = new List<ReportConfiguration>();
+    private List<int> isProcessing = new List<int>();
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        reportController.OnProgress += reportControllerOnProgress;
+        LoadReports();
+    }
+
+    private void LoadReports()
+    {
+        reportList = db.ReportConfigurations.ToList();
+    }
+
+    private void EditReport(int id)
+    {
+        // redirect to edit page
+        navManager.NavigateTo($"/reportdetail/{id}");
+    }
+
+    private void DeleteReport(int id)
+    {
+        try
+        {
+            var entry = db.ReportConfigurations.Find(id);
+            if (entry != null)
+            {
+                db.ReportConfigurations.Remove(entry);
+                db.SaveChangesAsync();
+            }
+            LoadReports();
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task RunReport(int id)
+    {
+        var report = db.ReportConfigurations.Find(id);
+        var mailConfig = db.MailConfigs.FirstOrDefault();
+        if (report != null && mailConfig != null)
+        {
+            jobStatus = "Getting workflow instances...";
+
+            isProcessing.Add(id);
+            await reportController.ProcessReport(report, mailConfig);
+            isProcessing.Remove(id);
+
+            jobStatus = string.Empty;
+            StateHasChanged();
+        }
+    }
+    private void reportControllerOnProgress(object? sender, ThereforeReportGenerator.Models.ProgressEventArgs e)
+    {
+        jobStatus = e.ProgressSummary;
+        StateHasChanged();
+    }
+}

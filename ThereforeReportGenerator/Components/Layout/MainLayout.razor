@@ -1,0 +1,35 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <main>
+        <div class="top-row px-4 d-flex justify-content-between align-items-center">
+            <span><a href="/" target="_self"><img src="/img/logo.png" width="40" /></a>&nbsp;Therefore Report Generator</span>
+            <NavLink class="btn btn-secondary" href="/serverconfig">Setup</NavLink>
+        </div>
+        <article>@Body</article>
+    </main>
+
+
+    <style>
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+
+    <div class="footer mt-auto bg-light">
+        <div class="container">
+            <span class="text-muted text-sm-center"><small>Server culture: @Thread.CurrentThread.CurrentCulture.DisplayName (@Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern)</small></span><br />
+           <span class="text-muted text-sm-center"><small>Server Timezone: @TimeZoneInfo.Local.ToString()</small></span>
+        </div>
+    </div>
+</div>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>

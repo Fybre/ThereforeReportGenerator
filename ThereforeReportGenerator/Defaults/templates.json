@@ -1,0 +1,35 @@
+[
+  {
+    "Id": 1,
+    "TemplateName": "Default - All Instances",
+    "EmailSubject": "Workflow report for all instances - [time]",
+    "EmailBody": "<p>Hello [username]</p><p>The following workflow tasks have been assigned to you, or a group you are in. Click on the link to open and process the task.</p>[tableallinstances]<p><b>All workflow instances</b></p><table border=1 width=100% style='border-collapse:collapse; margin-left: auto; margin-right: auto;'><tr><th style='background-color:#E8E8E8; padding:5px;'>Task Link</th><th style='background-color:#E8E8E8; padding:5px;'>Workflow</th><th style='background-color:#E8E8E8; padding:5px;'>Detail</th><th style='background-color:#E8E8E8'>Start Date</th><th style='background-color:#E8E8E8; padding:5px;'>Due Date</th></tr>[body]<tr style='[overduestyle]'><td style='padding:5px;'><a href='[twaurl]'>[taskname]</a></td><td style='padding:5px;'>[processname]</td><td style='padding:5px;'>[indexdatastring]</td><td align='center' style='padding:5px;'>[taskstart]</td><td align='center' style='padding:5px;'>[taskdue]</td></tr>[/body]</table>[/tableallinstances]<p><small>Generated at [time]<br>Server Timezone: [timezone]<br>Server Culture: [currentculture]</small></p>",
+    "InvalidEmailSubject": "Workflows with invalid email - [time]",
+    "InvalidEmailBody": ""
+  },
+  {
+    "Id": 2,
+    "TemplateName": "Default - Overdue Instances",
+    "EmailSubject": "Workflow report for overdue instances - [time]",
+    "EmailBody": "<p>Hello [username]</p><p>The following workflow tasks have been assigned to you, or a group you are in. Click on the link to open and process the task.</p>[tableoverdueinstances]<p><b>All overdue workflow instances</b></p><table border=1 width=100% style='border-collapse:collapse; margin-left: auto; margin-right: auto;'><tr><th style='background-color:#E8E8E8; padding:5px;'>Task Link</th><th style='background-color:#E8E8E8; padding:5px;'>Workflow</th><th style='background-color:#E8E8E8; padding:5px;'>Detail</th><th style='background-color:#E8E8E8'>Start Date</th><th style='background-color:#E8E8E8; padding:5px;'>Due Date</th></tr>[body]<tr style='[overduestyle]'><td style='padding:5px;'><a href='[twaurl]'>[taskname]</a></td><td style='padding:5px;'>[processname]</td><td style='padding:5px;'>[indexdatastring]</td><td align='center' style='padding:5px;'>[taskstart]</td><td align='center' style='padding:5px;'>[taskdue]</td></tr>[/body]</table>[/tableoverdueinstances]<p><small>Generated at [time]<br>Server Timezone: [timezone]<br>Server Culture: [currentculture]</small></p>",
+    "InvalidEmailSubject": "Workflows with invalid email - [time]",
+    "InvalidEmailBody": ""
+  },
+  {
+    "Id": 3,
+    "TemplateName": "Default - Not Overdue Instances",
+    "EmailSubject": "Workflow report for not overdue instances - [time]",
+    "EmailBody": "<p>Hello [username]</p><p>The following workflow tasks have been assigned to you, or a group you are in. Click on the link to open and process the task.</p>[tablenotoverdueinstances]<p><b>All not overdue workflow instances</b></p><table border=1 width=100% style='border-collapse:collapse; margin-left: auto; margin-right: auto;'><tr><th style='background-color:#E8E8E8; padding:5px;'>Task Link</th><th style='background-color:#E8E8E8; padding:5px;'>Workflow</th><th style='background-color:#E8E8E8; padding:5px;'>Detail</th><th style='background-color:#E8E8E8'>Start Date</th><th style='background-color:#E8E8E8; padding:5px;'>Due Date</th></tr>[body]<tr style='[overduestyle]'><td style='padding:5px;'><a href='[twaurl]'>[taskname]</a></td><td style='padding:5px;'>[processname]</td><td style='padding:5px;'>[indexdatastring]</td><td align='center' style='padding:5px;'>[taskstart]</td><td align='center' style='padding:5px;'>[taskdue]</td></tr>[/body]</table>[/tablenotoverdueinstances]<p><small>Generated at [time]<br>Server Timezone: [timezone]<br>Server Culture: [currentculture]</small></p></p>",
+    "InvalidEmailSubject": "Workflows with invalid email - [time]",
+    "InvalidEmailBody": ""
+  },
+  {
+    "Id": 4,
+    "TemplateName": "Default - Overdue and Not Overdue Instances",
+    "EmailSubject": "Workflow report for overdue and not overdue instances - [time]",
+    "EmailBody": "<p>Hello [username]</p><p>The following workflow tasks have been assigned to you, or a group you are in. Click on the link to open and process the task.</p>[tableoverdueinstances]<p><b>All overdue workflow instances</b></p><table border=1 width=100% style='border-collapse:collapse; margin-left: auto; margin-right: auto;'><tr><th style='background-color:#E8E8E8; padding:5px;'>Task Link</th><th style='background-color:#E8E8E8; padding:5px;'>Workflow</th><th style='background-color:#E8E8E8; padding:5px;'>Detail</th><th style='background-color:#E8E8E8'>Start Date</th><th style='background-color:#E8E8E8; padding:5px;'>Due Date</th></tr>[body]<tr style='[overduestyle]'><td style='padding:5px;'><a href='[twaurl]'>[taskname]</a></td><td style='padding:5px;'>[processname]</td><td style='padding:5px;'>[indexdatastring]</td><td align='center' style='padding:5px;'>[taskstart]</td><td align='center' style='padding:5px;'>[taskdue]</td></tr>[/body]</table>[/tableoverdueinstances][tablenotoverdueinstances]<p><b>All not overdue workflow instances</b></p><table border=1 width=100% style='border-collapse:collapse; margin-left: auto; margin-right: auto;'><tr><th style='background-color:#E8E8E8; padding:5px;'>Task Link</th><th style='background-color:#E8E8E8; padding:5px;'>Workflow</th><th style='background-color:#E8E8E8; padding:5px;'>Detail</th><th style='background-color:#E8E8E8'>Start Date</th><th style='background-color:#E8E8E8; padding:5px;'>Due Date</th></tr>[body]<tr style='[overduestyle]'><td style='padding:5px;'><a href='[twaurl]'>[taskname]</a></td><td style='padding:5px;'>[processname]</td><td style='padding:5px;'>[indexdatastring]</td><td align='center' style='padding:5px;'>[taskstart]</td><td align='center' style='padding:5px;'>[taskdue]</td></tr>[/body]</table>[/tablenotoverdueinstances]<p><small>Generated at [time]<br>Server Timezone: [timezone]<br>Server Culture: [currentculture]</small></p>",
+    "InvalidEmailSubject": "Workflows with invalid email - [time]",
+    "InvalidEmailBody": ""
+  }
+]
+
